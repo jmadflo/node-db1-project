@@ -1,5 +1,4 @@
 const express = require("express")
-const db = require("../data/dbConfig.js")
 const accountRouter = require('./accounts/accountRouter')
 
 const server = express()

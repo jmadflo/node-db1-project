@@ -4,13 +4,24 @@ const accountData = require('../../data/dbConfig.js')
 
 // gets all the accounts from the database
 router.get('/', (req, res) => {
-    accountData('accounts')
-        .then(accounts => {
-            res.status(200).json(accounts)
-        }) 
-        .catch (() => {
-            res.status(500).json({ message: 'Accounts could not be retrieved' })
-        })
+    // if we have these queries, use them to alter our displayed list of accounts
+    if (req.query.limit && req.query.sortby && req.query.sortdir){
+        accountData('accounts').orderBy(req.query.sortby, req.query.sortdir).limit(parseInt(req.query.limit))
+            .then(accounts => {
+                res.status(200).json(accounts)
+            }) 
+            .catch (() => {
+                res.status(500).json({ message: 'Accounts could not be retrieved' })
+            })
+    } else {
+        accountData('accounts')
+            .then(accounts => {
+                res.status(200).json(accounts)
+            }) 
+            .catch (() => {
+                res.status(500).json({ message: 'Accounts could not be retrieved' })
+            })
+    }
 })
 
 // I already got the account when I validated the id and stored it in req.account
